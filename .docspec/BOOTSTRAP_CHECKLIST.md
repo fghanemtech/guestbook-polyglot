@@ -1,0 +1,8 @@
+- Monorepo: frontend/, backend/, infra/, docs/contract/, .docspec/
+- OpenAPI.yaml sinkron dengan implementasi
+- Endpoint awal: GET /guestbook/entries, POST /guestbook/entries (idempotent)
+- Migrasi MySQL: tabel entries (id, name, message, created_at) + unique index (idempotency_key nullable)
+- Frontend: halaman Guestbook (list + form), React Query, PWA
+- Infra: docker-compose.yml, Caddyfile, script backup harian
+- CI: lint -> unit -> build -> integration (spin MySQL)
+- README: cara run lokal & test

@@ -1,0 +1,53 @@
+openapi: 3.0.3
+info: { title: Guestbook API, version: 0.1.0 }
+paths:
+  /guestbook/entries:
+    get:
+      summary: List guestbook entries (paginated)
+      parameters:
+        - in: query; name: page; schema: { type: integer, minimum: 1, default: 1 }
+        - in: query; name: limit; schema: { type: integer, minimum: 1, maximum: 100, default: 20 }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Entry'
+                  page: { type: integer }
+                  limit: { type: integer }
+    post:
+      summary: Create a guestbook entry
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: false
+          schema: { type: string, maxLength: 64 }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewEntry'
+      responses:
+        "201": { description: Created, content: { application/json: { schema: { $ref: '#/components/schemas/Entry' } } } }
+components:
+  schemas:
+    Entry:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string, maxLength: 100 }
+        message: { type: string, maxLength: 1000 }
+        created_at: { type: string, format: date-time }
+    NewEntry:
+      type: object
+      required: [name, message]
+      properties:
+        name: { type: string, maxLength: 100 }
+        message: { type: string, maxLength: 1000 }
